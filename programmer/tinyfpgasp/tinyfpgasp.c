@@ -224,9 +224,12 @@ int flash_read(uint8_t *data, uint32_t addr, uint32_t length)
 }
 
 // retry max "retry" times until 'match' of consecutive identical readings appear
+/*
 int flash_read_retry(uint8_t *data, uint32_t addr, uint32_t length, int retry, int match)
 {
+  return 0;
 }
+*/
 
 // only 3 selected sector lengths are possible
 int flash_erase_sector(uint32_t addr, uint32_t len)
@@ -479,13 +482,17 @@ int read_file_write_flash(char *filename, uint32_t addr, uint32_t length)
     }
     uint8_t must_write = 0;
     if(must_erase)
+    {
       for(uint32_t i = 0; i < sector_size; i++)
         if(file_sector_buf[i] != 0xFF)
           must_write = 1;
+    }
     else
+    {
       for(uint32_t i = 0; i < sector_size; i++)
         if(flash_sector_buf[i] != file_sector_buf[i])
           must_write = 1;
+    }
     if(0)
     printf("sector 0x%06X-0x%06X (size %d, erase %d, write %d)\n",
       erase_sector_addr,
